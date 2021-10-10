@@ -94,16 +94,4 @@ class ButtonTest extends TestCase
             ]
         ];
     }
-
-    /**
-     * Verifies ability of adding button onclick attribute
-     *
-     * @return void
-     */
-    public function testOnClickAttribute(): void
-    {
-        $this->_blockMock->setData(['onclick_attribute' => 'value']);
-        $attributes = $this->_blockMock->getAttributesHtml();
-        $this->assertStringContainsString('onclick', $attributes);
-    }
 }

@@ -5,7 +5,6 @@
  */
 namespace Magento\Backend\Block\Dashboard;
 
-use Magento\Directory\Model\Currency;
 use Magento\Store\Model\Store;
 
 /**
@@ -21,14 +20,9 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     protected $_totals = [];
 
     /**
-     * @var Currency|null
+     * @var \Magento\Directory\Model\Currency|null
      */
     protected $_currentCurrencyCode = null;
-
-    /**
-     * @var Currency
-     */
-    private $_currency;
 
     /**
      * Get totals
@@ -73,7 +67,7 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * Setting currency model
      *
-     * @param Currency $currency
+     * @param \Magento\Directory\Model\Currency $currency
      * @return void
      */
     public function setCurrency($currency)
@@ -84,7 +78,7 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * Retrieve currency model if not set then return currency model for current store
      *
-     * @return Currency
+     * @return \Magento\Directory\Model\Currency
      * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getCurrency()

@@ -64,11 +64,6 @@ class Config
     protected $_appState;
 
     /**
-     * @var Builder
-     */
-    private $_menuBuilder;
-
-    /**
      * @param \Magento\Backend\Model\Menu\Builder $menuBuilder
      * @param \Magento\Backend\Model\Menu\AbstractDirector $menuDirector
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
