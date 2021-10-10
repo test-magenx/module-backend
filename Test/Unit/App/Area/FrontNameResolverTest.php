@@ -51,9 +51,6 @@ class FrontNameResolverTest extends TestCase
      */
     protected $_defaultFrontName = 'defaultFrontName';
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
         /** @var MockObject|DeploymentConfig $deploymentConfigMock */
@@ -77,22 +74,30 @@ class FrontNameResolverTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testIfCustomPathUsed(): void
+    public function testIfCustomPathUsed()
     {
-        $this->configMock
-            ->method('getValue')
-            ->withConsecutive(['admin/url/use_custom_path'], ['admin/url/custom_path'])
-            ->willReturnOnConsecutiveCalls(true, 'expectedValue');
+        $this->configMock->expects(
+            $this->at(0)
+        )->method(
+            'getValue'
+        )->with(
+            'admin/url/use_custom_path'
+        )->willReturn(
+            true
+        );
+        $this->configMock->expects(
+            $this->at(1)
+        )->method(
+            'getValue'
+        )->with(
+            'admin/url/custom_path'
+        )->willReturn(
+            'expectedValue'
+        );
         $this->assertEquals('expectedValue', $this->model->getFrontName());
     }
 
-    /**
-     * @return void
-     */
-    public function testIfCustomPathNotUsed(): void
+    public function testIfCustomPathNotUsed()
     {
         $this->configMock->expects(
             $this->once()
@@ -111,18 +116,11 @@ class FrontNameResolverTest extends TestCase
      * @param string $host
      * @param string $useCustomAdminUrl
      * @param string $customAdminUrl
-     * @param bool $expectedValue
-     *
-     * @return void
+     * @param string $expectedValue
      * @dataProvider hostsDataProvider
      */
-    public function testIsHostBackend(
-        string $url,
-        string $host,
-        string $useCustomAdminUrl,
-        string $customAdminUrl,
-        bool $expectedValue
-    ): void {
+    public function testIsHostBackend($url, $host, $useCustomAdminUrl, $customAdminUrl, $expectedValue)
+    {
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
             ->willReturnMap(
@@ -139,7 +137,7 @@ class FrontNameResolverTest extends TestCase
                         ScopeInterface::SCOPE_STORE,
                         null,
                         $customAdminUrl
-                    ]
+                    ],
                 ]
             );
 
@@ -183,7 +181,7 @@ class FrontNameResolverTest extends TestCase
     /**
      * @return array
      */
-    public function hostsDataProvider(): array
+    public function hostsDataProvider()
     {
         return [
             'withoutPort' => [

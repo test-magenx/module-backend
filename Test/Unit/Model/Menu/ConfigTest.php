@@ -51,9 +51,6 @@ class ConfigTest extends TestCase
      */
     private $model;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
         $this->cacheInstanceMock = $this->createMock(Config::class);
@@ -89,15 +86,12 @@ class ConfigTest extends TestCase
                 'configReader' => $this->configReaderMock,
                 'configCacheType' => $this->cacheInstanceMock,
                 'logger' => $this->logger,
-                'appState' => $appState
+                'appState' => $appState,
             ]
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testGetMenuWithCachedObjectReturnsUnserializedObject(): void
+    public function testGetMenuWithCachedObjectReturnsUnserializedObject()
     {
         $this->cacheInstanceMock->expects(
             $this->once()
@@ -114,15 +108,17 @@ class ConfigTest extends TestCase
         $this->assertEquals($this->menuMock, $this->model->getMenu());
     }
 
-    /**
-     * @return void
-     */
-    public function testGetMenuWithNotCachedObjectBuildsObject(): void
+    public function testGetMenuWithNotCachedObjectBuildsObject()
     {
-        $this->cacheInstanceMock
-            ->method('load')
-            ->with(\Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT)
-            ->willReturn(false);
+        $this->cacheInstanceMock->expects(
+            $this->at(0)
+        )->method(
+            'load'
+        )->with(
+            \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT
+        )->willReturn(
+            false
+        );
 
         $this->configReaderMock->expects($this->once())->method('read')->willReturn([]);
 
@@ -140,10 +136,9 @@ class ConfigTest extends TestCase
     /**
      * @param string $expectedException
      *
-     * @return void
      * @dataProvider getMenuExceptionLoggedDataProvider
      */
-    public function testGetMenuExceptionLogged(string $expectedException): void
+    public function testGetMenuExceptionLogged($expectedException)
     {
         $this->expectException($expectedException);
         $this->menuBuilderMock->expects(
@@ -160,7 +155,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getMenuExceptionLoggedDataProvider(): array
+    public function getMenuExceptionLoggedDataProvider()
     {
         return [
             'InvalidArgumentException' => ['InvalidArgumentException'],
@@ -169,10 +164,7 @@ class ConfigTest extends TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
-    public function testGetMenuGenericExceptionIsNotLogged(): void
+    public function testGetMenuGenericExceptionIsNotLogged()
     {
         $this->logger->expects($this->never())->method('critical');
 

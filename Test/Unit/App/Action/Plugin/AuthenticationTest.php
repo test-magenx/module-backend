@@ -29,9 +29,6 @@ class AuthenticationTest extends TestCase
      */
     protected $plugin;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
         $this->auth = $this->createPartialMock(
@@ -45,19 +42,13 @@ class AuthenticationTest extends TestCase
         );
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function tearDown(): void
     {
         $this->auth = null;
         $this->plugin = null;
     }
 
-    /**
-     * @return void
-     */
-    public function testAroundDispatchProlongStorage(): void
+    public function testAroundDispatchProlongStorage()
     {
         $subject = $this->createMock(Index::class);
         $request = $this->createPartialMock(Http::class, ['getActionName']);
@@ -85,9 +76,9 @@ class AuthenticationTest extends TestCase
         $user->expects($this->once())
             ->method('reload');
 
-        $storage
+        $storage->expects($this->at(0))
             ->method('prolong');
-        $storage
+        $storage->expects($this->at(1))
             ->method('refreshAcl');
 
         $proceed = function ($request) use ($expectedResult) {
@@ -98,13 +89,12 @@ class AuthenticationTest extends TestCase
     }
 
     /**
-     * Calls aroundDispatch to access protected method _processNotLoggedInUser.
+     * Calls aroundDispatch to access protected method _processNotLoggedInUser
      *
-     * @return void
      * Data provider supplies different possibilities of request parameters and properties
      * @dataProvider processNotLoggedInUserDataProvider
      */
-    public function testProcessNotLoggedInUser($isIFrameParam, $isAjaxParam, $isForwardedFlag): void
+    public function testProcessNotLoggedInUser($isIFrameParam, $isAjaxParam, $isForwardedFlag)
     {
         $subject = $this->getMockBuilder(Index::class)
             ->disableOriginalConstructor()
@@ -165,7 +155,7 @@ class AuthenticationTest extends TestCase
     /**
      * @return array
      */
-    public function processNotLoggedInUserDataProvider(): array
+    public function processNotLoggedInUserDataProvider()
     {
         return [
             'iFrame' => [true, false, false],

@@ -31,9 +31,6 @@ class MassactionKeyTest extends TestCase
      */
     protected $subjectMock;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
         $this->subjectMock = $this->createMock(AbstractAction::class);
@@ -52,26 +49,26 @@ class MassactionKeyTest extends TestCase
             MassactionKey::class,
             [
                 'subject' => $this->subjectMock,
-                'request' => $this->requestMock
+                'request' => $this->requestMock,
             ]
         );
     }
 
     /**
-     * @param array|string $postData
+     * @param $postData array|string
      * @param array $convertedData
-     *
-     * @return void
      * @dataProvider beforeDispatchDataProvider
      */
-    public function testBeforeDispatchWhenMassactionPrepareKeyRequestExists(
-        $postData,
-        array $convertedData
-    ): void {
-        $this->requestMock
+    public function testBeforeDispatchWhenMassactionPrepareKeyRequestExists($postData, $convertedData)
+    {
+        $this->requestMock->expects($this->at(0))
             ->method('getPost')
-            ->withConsecutive(['massaction_prepare_key'], ['key'])
-            ->willReturnOnConsecutiveCalls('key', $postData);
+            ->with('massaction_prepare_key')
+            ->willReturn('key');
+        $this->requestMock->expects($this->at(1))
+            ->method('getPost')
+            ->with('key')
+            ->willReturn($postData);
         $this->requestMock->expects($this->once())
             ->method('setPostValue')
             ->with('key', $convertedData);
@@ -82,7 +79,7 @@ class MassactionKeyTest extends TestCase
     /**
      * @return array
      */
-    public function beforeDispatchDataProvider(): array
+    public function beforeDispatchDataProvider()
     {
         return [
             'post_data_is_array' => [['key'], ['key']],
@@ -90,10 +87,7 @@ class MassactionKeyTest extends TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
-    public function testBeforeDispatchWhenMassactionPrepareKeyRequestNotExists(): void
+    public function testBeforeDispatchWhenMassactionPrepareKeyRequestNotExists()
     {
         $this->requestMock->expects($this->once())
             ->method('getPost')
